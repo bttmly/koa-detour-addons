@@ -1,0 +1,19 @@
+{
+  "name": "koa-detour-addons",
+  "version": "0.1.0",
+  "description": "common middleware for koa-detour",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Nick Bottomley (github.com/nickb1080)",
+  "license": "MIT",
+  "dependencies": {
+    "@nickbottomley/responses": "^0.1.0"
+  },
+  "devDependencies": {
+    "expect": "^1.20.2",
+    "koa-detour": "^0.2.0",
+    "mocha": "^3.1.2"
+  }
+}
