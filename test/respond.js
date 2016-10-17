@@ -64,7 +64,7 @@ describe("#respond", function () {
     });
   });
 
-  it("does not promotes a null resolution value to a R.Ok() if options.defaultOk", function () {
+  it("does not promote a null resolution value to a R.Ok() if options.defaultOk", function () {
     const resource = { GET: () => null };
     const router = new KoaDetour().route("/", resource)
     respond(router, {defaultOk: true});
