@@ -1,5 +1,8 @@
 # koa-detour-addons
 
+[![Build Status](https://travis-ci.org/nickb1080/koa-detour-addons.svg?branch=master)](https://travis-ci.org/nickb1080/koa-detour-addons)
+[![Coverage Status](https://coveralls.io/repos/github/nickb1080/koa-detour-addons/badge.svg?branch=master)](https://coveralls.io/github/nickb1080/koa-detour-addons?branch=master)
+
 A small collection of helpful middleware for [koa-detour]().
 
 `koa-detour` and `koa-detour-addons` are designed to simplify the development of REST APIs.

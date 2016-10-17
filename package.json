@@ -4,7 +4,9 @@
   "description": "common middleware for koa-detour",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nyc mocha",
+    "cover": "nyc report --reporter=text-lcov | coveralls",
+    "travis": "npm run test; npm run cover;"
   },
   "author": "Nick Bottomley (github.com/nickb1080)",
   "license": "MIT",
@@ -12,8 +14,10 @@
     "@nickbottomley/responses": "^0.1.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.14",
     "expect": "^1.20.2",
     "koa-detour": "^0.2.0",
-    "mocha": "^3.1.2"
+    "mocha": "^3.1.2",
+    "nyc": "^8.3.1"
   }
 }
