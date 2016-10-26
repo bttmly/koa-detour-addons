@@ -1,22 +1,22 @@
 const expect = require("expect");
-const schema = require("../lib/schema");
+const validate = require("../lib/validate");
 const makeCtx = (prop, fn) => ({ resource: { [prop]: fn} });
 
-const schemaMw = schema();
+const validateMw = validate();
 
-describe("#schema", function () {
+describe("#validate", function () {
 
   it("works with defaults", function () {
-    return schemaMw(makeCtx("schema", () => true))
+    return validateMw(makeCtx("validate", () => true))
   });
 
   it("can provide resourceProp", function () {
-    return schema({resourceProp: "okCheck"})(
+    return validate({resourceProp: "okCheck"})(
       makeCtx("okCheck", () => true));
   });
 
-  it("throws BadRequest if schemaFn resolves with falsy", function (done) {
-    schemaMw(makeCtx("schema", () => {}))
+  it("throws BadRequest if validateFn resolves with falsy", function (done) {
+    validateMw(makeCtx("validate", () => {}))
       .catch(function (err) {
         expect(err.stack).toExist();
         expect(err.body).toBe("Bad Request");
@@ -25,8 +25,8 @@ describe("#schema", function () {
       });
   });
 
-  it("rethrows an error from schemaFn as a BadRequest", function (done) {
-    schemaMw(makeCtx("schema", () => { throw new Error("Kaboom!"); }))
+  it("rethrows an error from validateFn as a BadRequest", function (done) {
+    validateMw(makeCtx("validate", () => { throw new Error("Kaboom!"); }))
       .catch(err => {
         expect(err.stack).toExist();
         expect(err.body).toBe("Kaboom!");
@@ -35,9 +35,9 @@ describe("#schema", function () {
       });
   });
 
-  it("noop if no `schema` present", function () {
+  it("noop if no `validate` present", function () {
     const ctx = { resource: {} };
-    return schemaMw(ctx).then(() =>
+    return validateMw(ctx).then(() =>
       expect(ctx).toEqual({ resource: {} })); // ctx is unchanged
   });
 });

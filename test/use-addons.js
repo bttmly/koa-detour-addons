@@ -14,10 +14,10 @@ function mockRouter () {
 }
 
 const order = [
-  "schema",
+  "validate",
   "authenticate",
   "fetch",
-  "forbid",
+  "allow",
 ];
 
 describe("#useAddons", function () {
