@@ -15,7 +15,7 @@ const resource = {
 
   // if this method resolves to something falsy, response is a 400
   // otherwise, processing continues
-  schema (ctx) {
+  validate (ctx) {
     if (ctx.method !== "POST" && ctx.method !== "PUT") return;
     return applySchema(ctx, { title: String, isbn: String });
   },
@@ -29,18 +29,15 @@ const resource = {
 
   // if this method resolves to something falsy, response is 403
   // otherwise processing continues
-  forbid (ctx) {
+  allow (ctx) {
     // ctx.user is defined now
-    return Books.findByAuthor(ctx.user).then(books => {
-
-    });
+    return Books.isByAuthor(ctx.body.isbn, ctx.user);
   },
 
   // if this method resolves to null/undefind, response is 404
   // otherwise, the value is provided as "ctx.fetched"
   fetch (ctx) {
-    const {id} = ctx;
-    return Books.findById(id)
+    return Books.findByIsbn(ctx.body.isbn)
   },
 
   // handles GET requests
@@ -51,13 +48,13 @@ const resource = {
   // handles DELETE requests
   DELETE (ctx) {
     const {id} = ctx.fetched;
-    // R.NoContent() is a 201 response; `respond` add-on takes care of the details
+    // R.NoContent() is a 204 response; `respond` add-on takes care of the details
     return Books.deleteById(id).then(R.NoContent)
   }
 
   POST (ctx) {
-    // `schema` middleware already checked the validity of `ctx.body`
-    // R.Created() is a 204 response; `respond` add-on takes care of the details
+    // `validate` middleware already checked the validity of `ctx.body`
+    // R.Created() is a 201 response; `respond` add-on takes care of the details
     return Books.create(ctx.body).then(R.Created)
   }
 };
@@ -71,25 +68,25 @@ const Koa = require("koa");
 const app = new Koa().use(router);
 ```
 
-### `schema` middleware
+### `validate` middleware
 `type SchemaFn = (ctx: KoaContext) => Promise<Boolean>`
 
-The `schema` should return a Promise or value representing whether the request is valid or not. If that value is falsy, a 400 response (Bad Request) is sent automatically.
+The `validate` should return a Promise or value representing whether the request is valid or not. If that value is falsy, a 400 response (Bad Request) is sent automatically.
 
 ### `authenticate` middleware
 `type AuthenticateFn = (ctx: KoaContext) => Promise<Boolean>`
 
 The `authenticate` should return a Promise or value representing whether the request is from a properly authenticated user. If that value is falsy, a 401 response (Unauthorized) is sent automatically.
 
-### `forbid` middleware
+### `allow` middleware
 `type ForbidFn = (ctx: KoaContext) => Promise<Boolean>`
 
-The `forbid` should return a Promise or value representing whether the current user has access to the requested resource. If that value is falsy, a 403 response (Forbidden) is sent automatically.
+The `allow` should return a Promise or value representing whether the current user has access to the requested resource. If that value is falsy, a 403 response (Forbidden) is sent automatically.
 
 ### `fetch` middleware
 `type FetchFn = (ctx: KoaContext) => Promise<Object?>`
 
-The `fetch` should return a Promise or value of the business object being requested. If that value is falsy, a 404 response (NotFound) is sent automatically.
+The `fetch` should return a Promise or value of the business object being requested. If that value is null or undefined, a 404 response (NotFound) is sent automatically.
 
 ### `respond` plugin
-The `respond` plugin is responsible for interfacing between [response objects](TODO) and the Koa context object. In particular, it allows middleware and resources to `return` or `throw` response objects and have them handled properly.
+The `respond` plugin is responsible for interfacing between [response objects](https://github.com/nickb1080/responses) and the Koa context object. In particular, it allows middleware and resources to `return` or `throw` response objects and have them handled properly.
