@@ -11,7 +11,8 @@
   "author": "Nick Bottomley (github.com/nickb1080)",
   "license": "MIT",
   "dependencies": {
-    "@nickbottomley/responses": "^0.1.0"
+    "@nickbottomley/responses": "^0.1.0",
+    "p-try": "^1.0.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.14",
