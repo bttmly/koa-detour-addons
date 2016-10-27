@@ -54,12 +54,23 @@ describe("#respond", function () {
     const resource = { GET: () => ({ success: true }) };
     const router = new KoaDetour().route("/", resource)
     respond(router, {defaultOk: true});
-    const handler = router.middleware();
 
-    handler(ctx, next).then(function () {
+    router.middleware()(ctx, next).then(function () {
       expect(ctx.body).toEqual({ success: true });
       expect(ctx.headers).toEqual({ "x-test": true });
       expect(ctx.status).toEqual(200);
+      done();
+    });
+  });
+
+  it("doesn't screw up a resolution value that is already a response object if options.defaultOk", function () {
+    const resource = { GET: () => R.Created({ success: true }, { "x-test": true }) };
+    const router = new KoaDetour().route("/", resource)
+    respond(router, {defaultOk: true});
+
+    router.middleware()(ctx, next).then(function () {
+      expect(ctx.body).toEqual({ success: true });
+      expect(ctx.status).toEqual(201);
       done();
     });
   });
@@ -68,9 +79,27 @@ describe("#respond", function () {
     const resource = { GET: () => null };
     const router = new KoaDetour().route("/", resource)
     respond(router, {defaultOk: true});
-    const handler = router.middleware();
+    router.middleware()(ctx, next).then(function () {
+      expectCtxNotModified(ctx);
+      done();
+    });
+  });
 
-    handler(ctx, next).then(function () {
+  it("handles an undefined resolution", function () {
+    const resource = { GET: () => {} };
+    const router = new KoaDetour().route("/", resource)
+    respond(router);
+    router.middleware()(ctx, next).then(function () {
+      expectCtxNotModified(ctx);
+      done();
+    });
+  });
+
+  it("rejects on undefined resolution if options.rejectOnUndefined", function (done) {
+    const router = new KoaDetour().route("/", { GET: () => {} })
+    respond(router, {rejectOnUndefined: true});
+    router.middleware()(ctx, next).catch(function (err) {
+      expect(err.message).toEqual("Received resolution value of `undefined` from resource");
       expectCtxNotModified(ctx);
       done();
     });
@@ -110,6 +139,7 @@ describe("#respond", function () {
       done();
     });
   });
+
 });
 
 function expectCtxNotModified (ctx) {
