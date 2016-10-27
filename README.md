@@ -69,22 +69,22 @@ const app = new Koa().use(router);
 ```
 
 ### `validate` middleware
-`type SchemaFn = (ctx: KoaContext) => Promise<Boolean>`
+`type ValidateFn = (ctx: KoaContext) => Boolean | Promise<Boolean>`
 
-The `validate` should return a Promise or value representing whether the request is valid or not. If that value is falsy, a 400 response (Bad Request) is sent automatically.
+The `validate` should return a Promise or value representing whether the request is valid or not. If that value is falsy, a 400 response (Bad Request) is sent automatically. If `validateFn` throws or rejects, a 400 is sent *with that error message*. This is different from how the other middleware work -- they re-throw errors. This behavior makes it easy to use validation functions which throw errors. However, it can be dangerous where there is e.g. a programmer error in the validation function.
 
 ### `authenticate` middleware
-`type AuthenticateFn = (ctx: KoaContext) => Promise<Boolean>`
+`type AuthenticateFn = (ctx: KoaContext) => Boolean | Promise<Boolean>`
 
 The `authenticate` should return a Promise or value representing whether the request is from a properly authenticated user. If that value is falsy, a 401 response (Unauthorized) is sent automatically.
 
 ### `allow` middleware
-`type ForbidFn = (ctx: KoaContext) => Promise<Boolean>`
+`type ForbidFn = (ctx: KoaContext) => Boolean | Promise<Boolean>`
 
 The `allow` should return a Promise or value representing whether the current user has access to the requested resource. If that value is falsy, a 403 response (Forbidden) is sent automatically.
 
 ### `fetch` middleware
-`type FetchFn = (ctx: KoaContext) => Promise<Object?>`
+`type FetchFn = (ctx: KoaContext) => Object? | Promise<Object?>`
 
 The `fetch` should return a Promise or value of the business object being requested. If that value is null or undefined, a 404 response (NotFound) is sent automatically.
 
