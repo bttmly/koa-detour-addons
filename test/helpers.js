@@ -49,7 +49,7 @@ describe("helpers", function () {
           ctx.method = "PUT";
           return mw(ctx).then(() => expect(ctx.fetched).toBe(defaultEntity))
         });
-    })
+    });
 
     it("errors if no default and method defined", function (done) {
       const fetcher = helpers.byMethod({});
@@ -59,9 +59,7 @@ describe("helpers", function () {
           const ctx = makeCtx("fetch", fetcher);
           ctx.method = "POST";
           ctx.url = "/entity";
-          return mw(ctx).then(function () {
-          })
-          .catch(function (err) {
+          return mw(ctx).catch(function (err) {
             expect(err.message).toBe("No 'byMethod' handler found for POST /entity");
             done();
           });
