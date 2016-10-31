@@ -140,6 +140,22 @@ describe("#respond", function () {
     });
   });
 
+  it("accepts a custom responder", function (done) {
+
+    const router = new KoaDetour()
+      .route("/", { GET: () => R.OK("It is ok") })
+
+    const responder = (resp, context) => {
+      expect(resp).toEqual(R.OK("It is ok"));
+      expect(ctx).toBe(context);
+      done();
+    };
+
+    respond(router, {responder});
+
+    router.middleware()(ctx, next);
+  });
+
 });
 
 function expectCtxNotModified (ctx) {
