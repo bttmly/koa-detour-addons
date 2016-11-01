@@ -1,5 +1,5 @@
+const R = require("response-objects");
 const respond = require("../lib/respond");
-const R = require("@nickbottomley/responses");
 const KoaDetour = require("koa-detour");
 const expect = require("expect");
 
