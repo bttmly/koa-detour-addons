@@ -15,6 +15,7 @@
     "response-objects": "^0.2.0"
   },
   "devDependencies": {
+    "bluebird": "^3.4.7",
     "coveralls": "^2.11.14",
     "expect": "^1.20.2",
     "koa-detour": "^0.2.0",

@@ -2,6 +2,7 @@ const R = require("response-objects");
 const respond = require("../lib/respond");
 const KoaDetour = require("koa-detour");
 const expect = require("expect");
+const Bluebird = require("bluebird");
 
 const createCtx = (url = "/", method = "GET") => {
   const ctx = {};
@@ -143,7 +144,7 @@ describe("#respond", function () {
   it("accepts a custom responder", function (done) {
 
     const router = new KoaDetour()
-      .route("/", { GET: () => R.OK("It is ok") })
+      .route("/", { GET: () => R.OK("It is ok") });
 
     const responder = (resp, context) => {
       expect(resp).toEqual(R.OK("It is ok"));
@@ -154,6 +155,26 @@ describe("#respond", function () {
     respond(router, {responder});
 
     router.middleware()(ctx, next);
+  });
+
+  it("responders can be async", function (done) {
+    const router = new KoaDetour()
+      .route("/", { GET: () => R.OK({ok: true}) });
+
+      const responder = (resp, context) => {
+        return Bluebird.delay(100).then(function () {
+          ctx.ok = resp.body.ok;
+          ctx.async = true;
+        });
+      };
+
+      respond(router, {responder});
+
+      router.middleware()(ctx, next).then(function () {
+        expect(ctx.async).toBe(true);
+        expect(ctx.ok).toBe(true);
+        done();
+      });
   });
 
 });
