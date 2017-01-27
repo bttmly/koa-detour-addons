@@ -3,12 +3,8 @@ const useAddons = require("../lib");
 
 function mockRouter () {
   const mockRouter = {
-    successHandler: null,
-    errorHandler: null,
-    middleware: [],
-    use (f) { mockRouter.middleware.push(f); },
-    handleSuccess (f) { mockRouter.successHandler = f; return mockRouter; },
-    handleError (f) { mockRouter.errorHandler = f; return mockRouter; },
+    _middleware: [],
+    use (f) { mockRouter._middleware.push(f); },
   };
   return mockRouter;
 }
@@ -24,15 +20,8 @@ describe("#useAddons", function () {
   // this test is pretty fragile, it uses Function.name
   it("adds .use() middleware in the correct order", function () {
     const r = useAddons(mockRouter());
-    r.middleware.forEach(function (mw, i) {
+    r._middleware.forEach(function (mw, i) {
       expect(mw.name.startsWith(order[i])).toBe(true);
     });
-  });
-
-  it("installs the respond handlers", function () {
-    const r = useAddons(mockRouter());
-    const { successHandler, errorHandler } = r;
-    expect(successHandler.name).toBe("respondSuccess");
-    expect(errorHandler.name).toBe("respondError");
   });
 });
