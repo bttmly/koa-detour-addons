@@ -25,7 +25,7 @@ describe("#allow", function () {
       expect(err.body).toBe("Forbidden");
       expect(err.status).toBe(403);
       done();
-    })
+    });
   });
 
   it("throws Forbidden if fetch resolves to falsy", function (done) {
@@ -35,7 +35,7 @@ describe("#allow", function () {
       expect(err.body).toBe("Forbidden");
       expect(err.status).toBe(403);
       done();
-    })
+    });
   });
 
   it("noop if no `fetch` present", function () {

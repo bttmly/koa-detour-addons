@@ -22,12 +22,12 @@ describe("helpers", function () {
         .then(() => {
           const ctx = makeCtx("fetch", fetcher);
           ctx.method = "get";
-          return mw(ctx).then(() => expect(ctx.fetched).toBe(getEntity))
+          return mw(ctx).then(() => expect(ctx.fetched).toBe(getEntity));
         })
         .then(() => {
           const ctx = makeCtx("fetch", fetcher);
           ctx.method = "PUT";
-          return mw(ctx).then(() => expect(ctx.fetched).toBe(putEntity))
+          return mw(ctx).then(() => expect(ctx.fetched).toBe(putEntity));
         });
 
     });
@@ -42,12 +42,12 @@ describe("helpers", function () {
         .then(() => {
           const ctx = makeCtx("fetch", fetcher);
           ctx.method = "get";
-          return mw(ctx).then(() => expect(ctx.fetched).toBe(getEntity))
+          return mw(ctx).then(() => expect(ctx.fetched).toBe(getEntity));
         })
         .then(() => {
           const ctx = makeCtx("fetch", fetcher);
           ctx.method = "PUT";
-          return mw(ctx).then(() => expect(ctx.fetched).toBe(defaultEntity))
+          return mw(ctx).then(() => expect(ctx.fetched).toBe(defaultEntity));
         });
     });
 
@@ -67,4 +67,4 @@ describe("helpers", function () {
     });
 
   });
-})
+});

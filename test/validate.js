@@ -41,7 +41,7 @@ describe("#validate", function () {
 
 
   it("rethrows an error from validateFn as a BadRequest", function (done) {
-    validateMw(makeCtx("validate", () => { throw new Error("Kaboom!"); }))
+    validateMw(makeCtx("validate", () => { throw new Error("Kaboom!") }))
       .catch(err => {
         expect(err.stack).toExist();
         expect(err.body).toBe("Kaboom!");

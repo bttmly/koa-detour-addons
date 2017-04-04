@@ -2,11 +2,11 @@ const expect = require("expect");
 const useAddons = require("../lib");
 
 function mockRouter () {
-  const mockRouter = {
+  const router = {
     _middleware: [],
-    use (f) { mockRouter._middleware.push(f); },
+    use (f) { router._middleware.push(f) },
   };
-  return mockRouter;
+  return router;
 }
 
 const order = [

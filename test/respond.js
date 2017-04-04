@@ -31,7 +31,7 @@ describe("#respond", function () {
     });
   });
 
-  it("doesn't do anything if handler doesn't return a response object", function () {
+  it("doesn't do anything if handler doesn't return a response object", function (done) {
     const router = new KoaDetour().route("/", { GET: () => ({ success: true }) });
 
     respond(router)(ctx, next).then(function () {
@@ -40,18 +40,27 @@ describe("#respond", function () {
     });
   });
 
-  it("promotes a resolution value to a R.Ok() if options.defaultOk", function () {
+  it("promotes a resolution value to a 200 if options.default200", function (done) {
     const router = new KoaDetour().route("/", { GET: () => ({ success: true }) });
 
-    respond(router, { defaultOk: true })(ctx, next).then(function () {
+    respond(router, { default200: true })(ctx, next).then(function () {
       expect(ctx.body).toEqual({ success: true });
-      expect(ctx.headers).toEqual({ "x-test": true });
       expect(ctx.status).toEqual(200);
       done();
     });
   });
 
-  it("doesn't screw up a resolution value that is already a response object if options.defaultOk", function () {
+  it("options.defaultOk is same as options.default200", function (done) {
+    const router = new KoaDetour().route("/", { GET: () => ({ success: true }) });
+
+    respond(router, { defaultOk: true })(ctx, next).then(function () {
+      expect(ctx.body).toEqual({ success: true });
+      expect(ctx.status).toEqual(200);
+      done();
+    });
+  });
+
+  it("doesn't screw up a resolution value that is already a response object if options.defaultOk", function (done) {
     const router = new KoaDetour()
       .route("/", { GET: () => R.Created({ success: true }, { "x-test": true }) });
 
@@ -62,7 +71,7 @@ describe("#respond", function () {
     });
   });
 
-  it("does not promote a null resolution value to a R.Ok() if options.defaultOk", function () {
+  it("does not promote a null resolution value to a R.Ok() if options.defaultOk", function (done) {
     const router = new KoaDetour().route("/", { GET: () => null });
 
     respond(router, { defaultOk: true })(ctx, next).then(function () {
@@ -71,7 +80,7 @@ describe("#respond", function () {
     });
   });
 
-  it("handles an undefined resolution", function () {
+  it("handles an undefined resolution", function (done) {
     const router = new KoaDetour().route("/", { GET: () => {} });
 
     respond(router)(ctx, next).then(function () {
@@ -81,7 +90,7 @@ describe("#respond", function () {
   });
 
   it("rejects on undefined resolution if options.rejectOnUndefined", function (done) {
-    const router = new KoaDetour().route("/", { GET: () => {} })
+    const router = new KoaDetour().route("/", { GET: () => {} });
 
     respond(router, {rejectOnUndefined: true})(ctx, next).catch(function (err) {
       expect(err.message).toEqual("Received resolution value of `undefined` from resource");
@@ -92,7 +101,7 @@ describe("#respond", function () {
 
   it("sets properties on `ctx` if handler rejects with a response error", function (done) {
     const router = new KoaDetour()
-      .route("/", { GET: () => { throw R.BadRequest("Must provide id", { "x-test": true }); } });
+      .route("/", { GET: () => { throw R.BadRequest("Must provide id", { "x-test": true }) } });
 
     respond(router)(ctx, next).then(function () {
       expect(ctx.body).toEqual("Must provide id");
@@ -113,6 +122,17 @@ describe("#respond", function () {
     });
   });
 
+  it("promotes an error value to a 500 if options.default500", function (done) {
+    const router = new KoaDetour()
+      .route("/", { GET: () => { throw new Error("Kaboom!") } });
+
+    respond(router, { default500: true })(ctx, next).then(function () {
+      expect(ctx.body.message).toEqual("Kaboom!");
+      expect(ctx.status).toEqual(500);
+      done();
+    });
+  });
+
   it("accepts a custom responder", function (done) {
     const router = new KoaDetour().route("/", { GET: () => R.OK("It is ok") });
 
@@ -121,7 +141,7 @@ describe("#respond", function () {
       expect(ctx).toBe(context);
       done();
     };
-    respond(router, {responder})(ctx, next)
+    respond(router, {responder})(ctx, next);
   });
 
   it("responders can be async", function (done) {
@@ -130,8 +150,8 @@ describe("#respond", function () {
 
       const responder = (resp, context) => {
         return Bluebird.delay(100).then(function () {
-          ctx.ok = resp.body.ok;
-          ctx.async = true;
+          context.ok = resp.body.ok;
+          context.async = true;
         });
       };
 

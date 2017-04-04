@@ -10,18 +10,18 @@ describe("#fetch", function () {
 
   it("works with defaults (return promise)", function () {
     const ctx = makeCtx("fetch", () => Promise.resolve(entity));
-    return fetchMw(ctx).then(() => expect(ctx.fetched).toBe(entity))
+    return fetchMw(ctx).then(() => expect(ctx.fetched).toBe(entity));
   });
 
   it("works with defaults (return value)", function () {
     const ctx = makeCtx("fetch", () => entity);
-    return fetchMw(ctx).then(() => expect(ctx.fetched).toBe(entity))
+    return fetchMw(ctx).then(() => expect(ctx.fetched).toBe(entity));
   });
 
   it("can provide ctxProp and resourceProp", function () {
     const ctx = makeCtx("fetcher", () => entity);
     return fetch({ctxProp: "wasFetched", resourceProp: "fetcher"})(ctx)
-      .then(() => expect(ctx.wasFetched).toBe(entity))
+      .then(() => expect(ctx.wasFetched).toBe(entity));
   });
 
   it("throws NotFound if fetch returns nil", function (done) {
