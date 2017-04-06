@@ -1,15 +1,7 @@
 const expect = require("expect");
 const useAddons = require("../lib");
 
-function mockRouter () {
-  const router = {
-    _middleware: [],
-    use (f) { router._middleware.push(f) },
-  };
-  return router;
-}
-
-const order = [
+const expectedOrder = [
   "validate",
   "authenticate",
   "fetch",
@@ -19,9 +11,11 @@ const order = [
 describe("#useAddons", function () {
   // this test is pretty fragile, it uses Function.name
   it("adds .use() middleware in the correct order", function () {
-    const r = useAddons(mockRouter());
-    r._middleware.forEach(function (mw, i) {
-      expect(mw.name.startsWith(order[i])).toBe(true);
+
+    const actualOrder = [];
+    useAddons({ use (f) { actualOrder.push(f.name) } });
+    expectedOrder.forEach(function (name, i) {
+      expect(actualOrder[i].startsWith(name)).toBe(true);
     });
   });
 });

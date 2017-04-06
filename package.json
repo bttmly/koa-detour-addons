@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "p-try": "^1.0.0",
-    "response-objects": "^0.2.0"
+    "response-objects": "0.4.0"
   },
   "devDependencies": {
     "bluebird": "^3.4.7",
