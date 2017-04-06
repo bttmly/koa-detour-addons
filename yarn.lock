@@ -1844,9 +1844,9 @@ resolve@^1.1.6:
   dependencies:
     path-parse "^1.0.5"
 
-response-objects@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/response-objects/-/response-objects-0.4.0.tgz#6952e322b8931f9abea82d41d6b2c909137412a4"
+response-objects@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/response-objects/-/response-objects-0.5.0.tgz#39c7fce8f054703c212c32ae721aea9d7b49ce50"
   dependencies:
     statuses "^1.3.0"
 
