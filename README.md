@@ -1,7 +1,7 @@
 # koa-detour-addons
 
-[![Build Status](https://travis-ci.org/nickb1080/koa-detour-addons.svg?branch=master)](https://travis-ci.org/nickb1080/koa-detour-addons)
-[![Coverage Status](https://coveralls.io/repos/github/nickb1080/koa-detour-addons/badge.svg?branch=master)](https://coveralls.io/github/nickb1080/koa-detour-addons?branch=master)
+[![Build Status](https://travis-ci.org/bttmly/koa-detour-addons.svg?branch=master)](https://travis-ci.org/bttmly/koa-detour-addons)
+[![Coverage Status](https://coveralls.io/repos/github/bttmly/koa-detour-addons/badge.svg?branch=master)](https://coveralls.io/github/bttmly/koa-detour-addons?branch=master)
 
 A small collection of helpful middleware for [koa-detour]().
 
@@ -89,4 +89,4 @@ The `allow` should return a Promise or value representing whether the current us
 The `fetch` should return a Promise or value of the business object being requested. If that value is null or undefined, a 404 response (NotFound) is sent automatically.
 
 ### `respond` plugin
-The `respond` plugin is responsible for interfacing between [response objects](https://github.com/nickb1080/responses) and the Koa context object. In particular, it allows middleware and resources to `return` or `throw` response objects and have them handled properly.
+The `respond` plugin is responsible for interfacing between [response objects](https://github.com/bttmly/responses) and the Koa context object. In particular, it allows middleware and resources to `return` or `throw` response objects and have them handled properly.

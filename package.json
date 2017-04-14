@@ -8,7 +8,7 @@
     "cover": "nyc report --reporter=text-lcov | coveralls",
     "travis": "npm run test; npm run cover;"
   },
-  "author": "Nick Bottomley (github.com/nickb1080)",
+  "author": "Nick Bottomley (github.com/bttmly)",
   "license": "MIT",
   "dependencies": {
     "p-try": "^1.0.0",
