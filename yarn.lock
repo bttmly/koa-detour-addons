@@ -1844,11 +1844,11 @@ resolve@^1.1.6:
   dependencies:
     path-parse "^1.0.5"
 
-response-objects@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/response-objects/-/response-objects-0.5.0.tgz#39c7fce8f054703c212c32ae721aea9d7b49ce50"
+response-objects@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/response-objects/-/response-objects-0.7.0.tgz#2f5d934b9d770fa3e9320017dd27ff277fa68526"
   dependencies:
-    statuses "^1.3.0"
+    statuses "1.3.0"
 
 restore-cursor@^1.0.1:
   version "1.0.1"
@@ -1971,9 +1971,9 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
 
-statuses@^1.3.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.3.1.tgz#faf51b9eb74aaef3b3acf4ad5f61abf24cb7b93e"
+statuses@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.3.0.tgz#8e55758cb20e7682c1f4fce8dcab30bf01d1e07a"
 
 string-width@^1.0.1, string-width@^1.0.2:
   version "1.0.2"

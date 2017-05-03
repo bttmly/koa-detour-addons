@@ -11,8 +11,7 @@
   "author": "Nick Bottomley (github.com/bttmly)",
   "license": "MIT",
   "dependencies": {
-    "p-try": "^1.0.0",
-    "response-objects": "0.5.0"
+    "p-try": "^1.0.0"
   },
   "devDependencies": {
     "bluebird": "^3.4.7",
@@ -21,6 +20,11 @@
     "expect": "^1.20.2",
     "koa-detour": "1.0.0",
     "mocha": "^3.1.2",
-    "nyc": "^8.3.1"
+    "nyc": "^8.3.1",
+    "response-objects": "^0.7.0"
+  },
+  "peerDependencies": {
+    "object": "^0.1.1",
+    "response": "^0.18.0"
   }
 }
