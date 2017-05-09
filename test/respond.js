@@ -23,7 +23,7 @@ describe("#respond", function () {
     const router = new KoaDetour()
       .route("/", { GET: () => R.OK({ success: true }, {"x-test": true}) });
 
-    respond(router)(ctx, next).then(function () {
+    respond(router.middleware())(ctx, next).then(function () {
       expect(ctx.body).toEqual({ success: true });
       expect(ctx.headers).toEqual({ "x-test": true });
       expect(ctx.status).toEqual(200);
@@ -33,8 +33,7 @@ describe("#respond", function () {
 
   it("doesn't do anything if handler doesn't return a response object", function (done) {
     const router = new KoaDetour().route("/", { GET: () => ({ success: true }) });
-
-    respond(router)(ctx, next).then(function () {
+    respond(router.middleware())(ctx, next).then(function () {
       expectCtxNotModified(ctx);
       done();
     });
@@ -42,8 +41,7 @@ describe("#respond", function () {
 
   it("promotes a resolution value to a 200 if options.default200", function (done) {
     const router = new KoaDetour().route("/", { GET: () => ({ success: true }) });
-
-    respond(router, { default200: true })(ctx, next).then(function () {
+    respond(router.middleware(), { default200: true })(ctx, next).then(function () {
       expect(ctx.body).toEqual({ success: true });
       expect(ctx.status).toEqual(200);
       done();
@@ -53,7 +51,7 @@ describe("#respond", function () {
   it("options.defaultOk is same as options.default200", function (done) {
     const router = new KoaDetour().route("/", { GET: () => ({ success: true }) });
 
-    respond(router, { defaultOk: true })(ctx, next).then(function () {
+    respond(router.middleware(), { defaultOk: true })(ctx, next).then(function () {
       expect(ctx.body).toEqual({ success: true });
       expect(ctx.status).toEqual(200);
       done();
@@ -64,7 +62,7 @@ describe("#respond", function () {
     const router = new KoaDetour()
       .route("/", { GET: () => R.Created({ success: true }, { "x-test": true }) });
 
-    respond(router, { defaultOk: true })(ctx, next).then(function () {
+    respond(router.middleware(), { defaultOk: true })(ctx, next).then(function () {
       expect(ctx.body).toEqual({ success: true });
       expect(ctx.status).toEqual(201);
       done();
@@ -74,7 +72,7 @@ describe("#respond", function () {
   it("does not promote a null resolution value to a R.Ok() if options.defaultOk", function (done) {
     const router = new KoaDetour().route("/", { GET: () => null });
 
-    respond(router, { defaultOk: true })(ctx, next).then(function () {
+    respond(router.middleware(), { defaultOk: true })(ctx, next).then(function () {
       expectCtxNotModified(ctx);
       done();
     });
@@ -83,7 +81,7 @@ describe("#respond", function () {
   it("handles an undefined resolution", function (done) {
     const router = new KoaDetour().route("/", { GET: () => {} });
 
-    respond(router)(ctx, next).then(function () {
+    respond(router.middleware())(ctx, next).then(function () {
       expectCtxNotModified(ctx);
       done();
     });
@@ -92,7 +90,7 @@ describe("#respond", function () {
   it("rejects on undefined resolution if options.rejectOnUndefined", function (done) {
     const router = new KoaDetour().route("/", { GET: () => {} });
 
-    respond(router, {rejectOnUndefined: true})(ctx, next).catch(function (err) {
+    respond(router.middleware(), {rejectOnUndefined: true})(ctx, next).catch(function (err) {
       expect(err.message).toEqual("Received resolution value of `undefined` from resource");
       expectCtxNotModified(ctx);
       done();
@@ -103,7 +101,7 @@ describe("#respond", function () {
     const router = new KoaDetour()
       .route("/", { GET: () => { throw R.BadRequest("Must provide id", { "x-test": true }) } });
 
-    respond(router)(ctx, next).then(function () {
+    respond(router.middleware())(ctx, next).then(function () {
       expect(ctx.body).toEqual("Must provide id");
       expect(ctx.headers).toEqual({ "x-test": true });
       expect(ctx.status).toEqual(400);
@@ -115,7 +113,7 @@ describe("#respond", function () {
     const router = new KoaDetour()
       .route("/", { GET: () => { throw new Error("Kaboom!") } });
 
-    respond(router)(ctx, next).catch(function (err) {
+    respond(router.middleware())(ctx, next).catch(function (err) {
       expect(err.message).toEqual("Kaboom!");
       expectCtxNotModified(ctx);
       done();
@@ -126,7 +124,7 @@ describe("#respond", function () {
     const router = new KoaDetour()
       .route("/", { GET: () => { throw new Error("Kaboom!") } });
 
-    respond(router, { default500: true })(ctx, next).then(function () {
+    respond(router.middleware(), { default500: true })(ctx, next).then(function () {
       expect(ctx.body.message).toEqual("Kaboom!");
       expect(ctx.status).toEqual(500);
       done();
@@ -141,7 +139,7 @@ describe("#respond", function () {
       expect(ctx).toBe(context);
       done();
     };
-    respond(router, {responder})(ctx, next);
+    respond(router.middleware(), {responder})(ctx, next);
   });
 
   it("responders can be async", function (done) {
@@ -155,11 +153,23 @@ describe("#respond", function () {
         });
       };
 
-      respond(router, {responder})(ctx, next).then(function () {
+      respond(router.middleware(), {responder})(ctx, next).then(function () {
         expect(ctx.async).toBe(true);
         expect(ctx.ok).toBe(true);
         done();
       });
+  });
+
+  it("can take a full router object in first position", function (done) {
+    const router = new KoaDetour()
+      .route("/", { GET: () => R.OK({ success: true }, {"x-test": true}) });
+
+    respond(router)(ctx, next).then(function () {
+      expect(ctx.body).toEqual({ success: true });
+      expect(ctx.headers).toEqual({ "x-test": true });
+      expect(ctx.status).toEqual(200);
+      done();
+    });
   });
 
 });
