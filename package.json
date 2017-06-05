@@ -24,7 +24,6 @@
     "response-objects": "^0.7.0"
   },
   "peerDependencies": {
-    "object": "^0.1.1",
-    "response": "^0.18.0"
+    "response-objects": "^0.7.0"
   }
 }
